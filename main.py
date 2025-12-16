@@ -5,6 +5,9 @@ from machine import WDT
 
 print("ESP32 KOMBI MAIN ÇALIŞIYOR")
 
+TELEGRAM_TOKEN = secret.TELEGRAM_TOKEN
+TELEGRAM_CHAT_ID=secret.TELEGRAM_CHAT_ID
+
 wdt = WDT(timeout=15000)
 
 UTC_OFFSET = 3 * 3600   # Türkiye için +3 saat
