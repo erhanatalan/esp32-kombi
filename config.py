@@ -1,0 +1,17 @@
+# --- Sunucu ---
+SERVER_PORT = 80
+
+# --- DHT ---
+DHT_PIN = 14
+
+# --- Zaman ---
+DAY_START_HOUR = 7
+DAY_END_HOUR = 23
+
+DAY_TEMP_MIN = 21
+DAY_TEMP_MAX = 24
+
+NIGHT_TEMP_MIN = 19
+NIGHT_TEMP_MAX = 22
+
+READ_INTERVAL = 300  # 5 dk
