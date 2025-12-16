@@ -1,5 +1,6 @@
 import socket, time, dht, machine, ntptime
 import ujson, gc, config
+import secret
 from machine import WDT
 
 print("ESP32 KOMBI MAIN ÇALIŞIYOR")
