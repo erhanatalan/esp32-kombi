@@ -6,6 +6,8 @@ print("ESP32 KOMBI MAIN ÇALIŞIYOR")
 
 wdt = WDT(timeout=15000)
 
+UTC_OFFSET = 3 * 3600   # Türkiye için +3 saat
+
 # ---------- TIME ----------
 try:
     ntptime.settime()
@@ -13,7 +15,7 @@ except:
     pass
 
 def get_time_hm():
-    t = time.localtime()
+    t = time.localtime(time.time() + UTC_OFFSET)
     return "{:02d}:{:02d}".format(t[3], t[4])
 
 def is_day():
