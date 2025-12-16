@@ -21,6 +21,10 @@ def wifi_check():
         machine.reset()
 
 wifi_connect()
+
+time.sleep(2)      # WiFi tam otursun
+check_update()     # OTA BURADA
+
 try:
     ntptime.settime()
 except:
