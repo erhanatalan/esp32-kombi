@@ -2,6 +2,51 @@ import network, socket, time, dht, machine, ntptime
 import ujson, gc, config
 from machine import WDT
 
+import urequests
+
+LOCAL_VERSION = "1.0.0"
+
+VERSION_URL = "https://raw.githubusercontent.com/erhanatalan/esp32-kombi/main/version.txt"
+MAIN_URL    = "https://raw.githubusercontent.com/erhanatalan/esp32-kombi/main/main.py"
+
+def ota_update():
+    try:
+        print("OTA: main.py indiriliyor")
+        r = urequests.get(MAIN_URL)
+        code = r.text
+        r.close()
+
+        if len(code) < 200:
+            print("OTA: dosya çok küçük, iptal")
+            return
+
+        with open("main.py", "w") as f:
+            f.write(code)
+
+        print("OTA: tamam, reset")
+        machine.reset()
+
+    except Exception as e:
+        print("OTA ERROR:", e)
+
+def check_update():
+    try:
+        print("OTA: version kontrol")
+        r = urequests.get(VERSION_URL)
+        remote_version = r.text.strip()
+        r.close()
+
+        print("LOCAL:", LOCAL_VERSION, "REMOTE:", remote_version)
+
+        if remote_version != LOCAL_VERSION:
+            ota_update()
+        else:
+            print("OTA: güncel")
+
+    except Exception as e:
+        print("OTA ERROR:", e)
+
+
 wdt = WDT(timeout=15000)
 
 # ---------- WIFI ----------
