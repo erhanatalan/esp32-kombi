@@ -44,7 +44,6 @@ def decide(temp):
     else:
         if temp < config.NIGHT_TEMP_MIN: return "OPEN"
         if temp > config.NIGHT_TEMP_MAX: return "CLOSE"
-    return "KEEP"
 
 # ---------- CACHE ----------
 cache = {
