@@ -3,14 +3,11 @@ import ujson, gc, config
 import secret
 from machine import WDT
 
-print("ESP32 KOMBI MAIN ÇALIŞIYOR")
-
-TELEGRAM_TOKEN = secret.TELEGRAM_TOKEN
-TELEGRAM_CHAT_ID=secret.TELEGRAM_CHAT_ID
+print("ESP32 SENSOR SERVER ÇALIŞIYOR")
 
 wdt = WDT(timeout=15000)
 
-UTC_OFFSET = 3 * 3600   # Türkiye için +3 saat
+UTC_OFFSET = 3 * 3600   # Türkiye
 
 # ---------- TIME ----------
 try:
@@ -22,34 +19,20 @@ def get_time_hm():
     t = time.localtime(time.time() + UTC_OFFSET)
     return "{:02d}:{:02d}".format(t[3], t[4])
 
-def is_day():
-    h = time.localtime()[3]
-    return config.DAY_START_HOUR <= h < config.DAY_END_HOUR
-
 # ---------- SENSOR ----------
 sensor = dht.DHT22(machine.Pin(config.DHT_PIN))
 
 def read_dht():
     try:
         sensor.measure()
-        return round(sensor.temperature(),1), round(sensor.humidity(),1)
+        return round(sensor.temperature(), 1), round(sensor.humidity(), 1)
     except:
         return None, None
-
-# ---------- RELAY LOGIC ----------
-def decide(temp):
-    if is_day():
-        if temp < config.DAY_TEMP_MIN: return "OPEN"
-        if temp > config.DAY_TEMP_MAX: return "CLOSE"
-    else:
-        if temp < config.NIGHT_TEMP_MIN: return "OPEN"
-        if temp > config.NIGHT_TEMP_MAX: return "CLOSE"
 
 # ---------- CACHE ----------
 cache = {
     "temperature": None,
     "humidity": None,
-    "relay": "UNKNOWN",
     "timestamp": "00:00"
 }
 
@@ -75,10 +58,9 @@ while True:
             cache.update({
                 "temperature": t,
                 "humidity": h,
-                "relay": decide(t),
                 "timestamp": get_time_hm()
             })
-            print("CACHE:", cache)
+            print("DATA:", cache)
         last_read = now
 
     try:
